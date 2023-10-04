@@ -1,0 +1,207 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vs-5gc
+  namespace: 5gc-gateway
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - 5gc-gateway
+  http:
+  # NUDM (DEFAULT)
+  - name: "route-nudm"
+    retries:
+      attempts: 0
+    match:
+    - port: 80
+      uri:
+        prefix: "/nudm"
+    route:
+    - destination:
+        host: svc-udm.5gc-udm.svc.cluster.local
+        port:
+          number: 80
+
+  # NUDR POLICY (open5gs)
+  - name: "route-nudr-policy"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nudr-dr/v1/policy-data"
+    route:
+    - destination:
+        host: access-core-udr.5gc-other.svc.cluster.local
+        port:
+          number: 80
+  # NUDR (DEFAULT)
+  - name: "route-nudr"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nudr"
+    route:
+    - destination:
+        host: svc-udr.5gc-udr.svc.cluster.local
+        port:
+          number: 80
+
+  # NAUSF (UEAU)
+  - name: "route-nausf"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nausf"
+    route:
+    - destination:
+        host: svc-ausf.5gc-ausf.svc.cluster.local
+        port:
+          number: 80
+
+  # NAMF (open5gs)
+  - name: "route-namf"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/namf"
+    route:
+    - destination:
+        host: access-core-amf.5gc-amf.svc.cluster.local
+        port:
+          number: 80
+
+  # NSMF (open5gs)
+  - name: "route-nsmf"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nsmf"
+    route:
+    - destination:
+        host: access-core-smf.5gc-smf.svc.cluster.local
+        port:
+          number: 80
+
+  # NNRF (open5gs)
+  - name: "nnrf-nfm"
+    retries:
+      attempts: 0
+    match:
+    - port: 80
+      uri:
+        prefix: "/nnrf-nfm"
+    route:
+    - destination:
+        host: access-core-nrf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+  - name: "nnrf-disc"
+    retries:
+      attempts: 0
+    match:
+    - port: 80
+      uri:
+        prefix: "/nnrf-disc"
+    route:
+    - destination:
+        host: access-core-nrf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+
+  # NPCF (open5gs)
+  - name: "npcf-am-policy-control"
+    retries:
+      attempts: 0
+    match:
+    - port: 80
+      uri:
+        prefix: "/npcf-am-policy-control"
+    route:
+    - destination:
+        host: access-core-pcf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+  - name: "npcf-smpolicycontrol"
+    retries:
+      attempts: 0
+    match:
+    - port: 80
+      uri:
+        prefix: "/npcf-smpolicycontrol"
+    route:
+    - destination:
+        host: access-core-pcf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+
+  # NNSSF (open5gs)
+  - name: "route-nnssf"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nnssf"
+    route:
+    - destination:
+        host: access-core-nssf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+
+  # NBSF (open5gs)
+  - name: "route-nbsf"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/nbsf"
+    route:
+    - destination:
+        host: access-core-bsf.5gc-other.svc.cluster.local
+        port:
+          number: 80
+
+  - name: "route-namf-noti"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/amcs"
+    route:
+    - destination:
+        #host: svc-amf-call.5gc-amf.svc.cluster.local
+        host: svc-sim-amf.5gc-sim.svc.cluster.local
+        port:
+          number: 80
+
+  - name: "route-nsmf-noti"
+    retries:
+      attempts: 0
+    match:
+    - uri:
+        prefix: "/smps"
+    route:
+    - destination:
+        #host: svc-smf-call.5gc-smf.svc.cluster.local
+        host: svc-sim-smf.5gc-sim.svc.cluster.local
+        port:
+          number: 80
+
+  # NUDM SIMULATOR
+  - name: "route-nudm-sim"
+    retries:
+      attempts: 0
+    match:
+    - port: 30080
+      uri:
+        prefix: "/nudm"
+    route:
+    - destination:
+        host: svc-np-ausf-udmsim.5gc-ausf-sim.svc.cluster.local
+        port:
+          number: 30080
+

@@ -1,0 +1,13 @@
+apiVersion: fiveg.kt.com/v1alpha1
+kind: Infra
+metadata:
+  labels:
+    app.kubernetes.io/name: infra
+    app.kubernetes.io/instance: infra-sample
+    app.kubernetes.io/part-of: infra-operator
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: infra-operator
+  name: infra-sample
+  namespace: 5gc
+spec:
+  # TODO(user): Add fields here
